@@ -1,0 +1,143 @@
+---
+title: "Troubleshoot card detection, PIN, and import errors"
+description: "Solutions for common Satochip-Utils problems including card not detected, PIN errors, blocked cards, authenticity failures, and import errors."
+---
+
+Most issues with Satochip-Utils fall into a small number of categories: the card is not detected, a PIN is entered incorrectly too many times, a secret is too large for the card's version, or the authenticity check returns an unexpected result. Work through the relevant section below to resolve your issue.
+
+<AccordionGroup>
+  <Accordion title="Card not detected">
+    Satochip-Utils relies on the PC/SC subsystem and the `pyscard` library to communicate with smart card readers.
+
+    **Steps to resolve:**
+
+    1. Confirm that the USB smart card reader is firmly plugged in to your computer.
+    2. Remove the card from the reader, wait two seconds, then reinsert it.
+    3. Close and reopen Satochip-Utils — the application re-scans for cards at startup.
+    4. Verify that PC/SC drivers are installed on your operating system:
+       - **Windows** — PC/SC is included. Check that the "Smart Card" service is running in Services (`services.msc`).
+       - **macOS** — PC/SC is included. No extra steps are needed.
+       - **Linux** — Install `pcscd` and ensure the service is running: `sudo systemctl start pcscd`.
+    5. Confirm that `pyscard` is installed in your Python environment: `pip install pyscard`.
+    6. Try a different USB port or a different card reader.
+  </Accordion>
+
+  <Accordion title="Wrong PIN error">
+    If you enter an incorrect PIN, the card returns a `PIN failed` response. The number of remaining PIN attempts is displayed in the application log and in the status message.
+
+    The response code `0x63C0` indicates a PIN failure. The lower nibble of the second byte encodes the remaining tries — for example, `0x63C2` means two tries remain.
+
+    **Steps to resolve:**
+
+    1. Re-enter your PIN carefully. Verify that Caps Lock is not active.
+    2. Check the log output for the remaining tries count before attempting again.
+    3. If you are uncertain of the PIN, stop entering attempts to avoid blocking the card.
+
+    <Warning>
+      Each incorrect PIN entry consumes one attempt. Once all attempts are exhausted, the card is blocked. See "PIN blocked" below.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="PIN blocked">
+    After too many incorrect PIN entries, the card raises a `PinBlockedError` and displays the message: "Too many wrong PIN! Your card has been blocked."
+
+    A blocked card cannot be unlocked by entering the correct PIN. The only recovery option is a factory reset, which erases all private keys, secrets, labels, and settings from the card.
+
+    <Warning>
+      A factory reset is irreversible. All data on the card is permanently deleted. Ensure you have a backup of your seed phrase (for Satochip) or all secrets (for Seedkeeper) before proceeding. If you do not have a backup, the data cannot be recovered.
+    </Warning>
+
+    To perform a factory reset, click **Reset my Card** in the left navigation menu and follow the on-screen wizard. The wizard asks you to remove and reinsert the card several times to complete the reset sequence.
+  </Accordion>
+
+  <Accordion title="Authenticity check fails">
+    If the authenticity screen shows "Your card is not authentic", Satochip-Utils was unable to verify the certificate chain stored on the card.
+
+    Possible causes:
+
+    - The card was not manufactured by Satochip.
+    - The card applet was loaded by someone other than Satochip.
+    - There is a communication error during the certificate verification.
+
+    **Steps to resolve:**
+
+    1. Remove and reinsert the card, then run the authenticity check again.
+    2. Try the check on a different computer to rule out a driver issue.
+    3. If the card consistently fails the authenticity check and you did not load the applet yourself, **do not use the card**.
+
+    Contact **support@satochip.io** to report any suspicious device.
+  </Accordion>
+
+  <Accordion title="Secret import fails — payload too long">
+    Satochip-Utils raises a `ValueError` with the message "Payload is too long for Seedkeeper v1 (max 255 bytes)!" when you attempt to import a secret whose encoded payload exceeds 255 bytes on a Seedkeeper v1 card (protocol version `< 2`).
+
+    This limit applies to all secret types, including passwords (where the combined size of password + login + URL is checked), mnemonics with long passphrases, data blobs, and wallet descriptors.
+
+    **Steps to resolve:**
+
+    - Shorten the content being imported so that the total encoded payload stays under 255 bytes.
+    - If you need to store larger secrets, use a Seedkeeper v2 card (protocol version `>= 2`), which has no 255-byte payload cap.
+  </Accordion>
+
+  <Accordion title="Secret deletion not supported">
+    Satochip-Utils raises a `ValueError` with the message "Secret deletion is not supported on Seedkeeper v0.1!" when you attempt to delete a secret on a Seedkeeper v1 card.
+
+    Secret deletion (`seedkeeper_reset_secret`) requires protocol version 2 or higher. On Seedkeeper v1, secrets written to the card are permanent and cannot be removed individually.
+
+    **Steps to resolve:**
+
+    - Use a Seedkeeper v2 card if you need the ability to delete secrets.
+    - On v1 cards, plan your secret storage carefully before importing, as there is no way to remove individual secrets after they are written.
+  </Accordion>
+
+  <Accordion title="Application won't start">
+    If Satochip-Utils fails to launch, the most common causes are a Python version that is too old or a missing dependency.
+
+    **Steps to resolve:**
+
+    1. Confirm that Python 3.8 or later is installed: `python --version`.
+    2. Install all required dependencies from the project root:
+       ```bash
+       pip install -r requirements.txt
+       ```
+    3. If you see an import error for `customtkinter`, `pyscard`, or `pysatochip`, run the install command above again or install the specific package manually.
+    4. On Linux, ensure that Tcl/Tk is available for the GUI: `sudo apt install python3-tk` (Debian/Ubuntu) or the equivalent for your distribution.
+  </Accordion>
+
+  <Accordion title="Backup interrupted">
+    If the Seedkeeper backup wizard is interrupted — for example, because the card was removed unexpectedly or the application crashed — the backup may be in an incomplete state.
+
+    **Steps to resolve:**
+
+    1. Restart Satochip-Utils.
+    2. Reinsert the master Seedkeeper card.
+    3. Navigate to the backup section and restart the backup wizard from the beginning.
+
+    The backup wizard copies secrets from the master card to a backup card in a single session. Partially completed backups do not corrupt either card — you can safely restart the process.
+  </Accordion>
+</AccordionGroup>
+
+## Error code reference
+
+The table below lists the response codes defined in `constants.py` that you may see in log output.
+
+| Code | Meaning |
+|---|---|
+| `0x9000` | OK — operation successful |
+| `0x63C0` | PIN failed (lower nibble = remaining tries) |
+| `0x9C01` | No memory left on card |
+| `0x9C03` | Operation not allowed |
+| `0x9C04` | Setup not done |
+| `0x9C05` | Feature unsupported |
+| `0x9C08` | Secret not found |
+| `0x9C0B` | Invalid signature |
+| `0x9C0C` | Identity blocked |
+| `0x9C0F` | Invalid parameter |
+| `0x9C10` | Incorrect P1 |
+| `0x9C11` | Incorrect P2 |
+| `0x9C30` | Lock error |
+| `0x9C31` | Export not allowed |
+| `0x9C32` | Import data too long |
+| `0x9C33` | Wrong MAC during import |
+| `0x9CFF` | Internal error |
+| `0x0000` | Unexpected error |

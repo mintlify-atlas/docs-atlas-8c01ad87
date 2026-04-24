@@ -1,0 +1,35 @@
+---
+title: "Satodime: bearer card management in Satochip-Utils"
+description: "Overview of what Satochip-Utils lets you do with a Satodime bearer card — view card info, edit labels, and verify authenticity of your device."
+---
+
+Satodime is a bearer instrument for cryptocurrency: whoever holds the physical card holds the keys. Unlike Satochip and Seedkeeper, Satodime requires no PIN to access its functions. There is no PIN setup, no PIN entry, and no seed import — the card is ready to use as soon as it is inserted. Satochip-Utils lets you manage your Satodime by editing its label, verifying that it is a genuine Satochip-manufactured card, and inspecting card information such as the applet version and setup status.
+
+<Note>
+  Satodime does not support PIN or seed operations. PIN change and seed import menus are only available for Satochip and Seedkeeper cards. When a Satodime is detected, those options are disabled automatically.
+</Note>
+
+## What you can do with a Satodime
+
+<CardGroup cols={2}>
+  <Card title="Edit label and view card info" icon="tag" href="/satodime/manage-card">
+    Set a human-readable label to identify your card and inspect the applet version, setup status, and NFC policy.
+  </Card>
+  <Card title="Verify authenticity" icon="shield-check" href="/satodime/manage-card#check-authenticity">
+    Confirm that your Satodime carries a valid certificate chain issued by Satochip, proving it is a genuine device.
+  </Card>
+</CardGroup>
+
+## How Satodime differs from Satochip and Seedkeeper
+
+| Feature | Satodime | Satochip | Seedkeeper |
+|---|---|---|---|
+| PIN required | No | Yes | Yes |
+| Seed storage | No | Yes | No |
+| Secret storage | No | No | Yes |
+| Bearer instrument | Yes | No | No |
+| Edit label | Yes | Yes | Yes |
+| Authenticity check | Yes | Yes | Yes |
+| Factory reset | No | Yes | Yes |
+
+Because Satodime is a bearer card, anyone who inserts it into a card reader can edit the label or read card information. Protect physical access to the card the same way you would protect physical cash.

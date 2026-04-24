@@ -1,0 +1,48 @@
+---
+title: "Seedkeeper: encrypted secret storage on a smart card"
+description: "Seedkeeper is a smart card that securely stores passwords, BIP39 mnemonics, wallet descriptors, 2FA secrets, and raw data — all protected by your PIN."
+---
+
+Seedkeeper is a JavaCard-based smart card designed exclusively for storing secrets. Unlike a hardware wallet, Seedkeeper does not sign transactions — its sole purpose is to keep your sensitive data encrypted on the card's secure chip, accessible only after entering your PIN. Satochip-Utils is the desktop companion that lets you initialize, import, generate, view, and back up everything stored on your Seedkeeper.
+
+## How Seedkeeper protects your secrets
+
+Every secret is stored in the card's protected memory in encrypted form. Nothing is readable without PIN verification, and the card blocks itself after five consecutive wrong attempts. When you view a secret, the plaintext is exported to the application only if the secret's export rights permit it — secrets marked as non-exportable cannot be read out in plaintext by any software.
+
+## Supported secret types
+
+Seedkeeper can store any of the following secret types:
+
+| Type | Description |
+|---|---|
+| **Masterseed** | Raw 64-byte BIP32 master seed derived from a mnemonic |
+| **BIP39 mnemonic** | 12- or 24-word mnemonic plus optional passphrase, stored with entropy |
+| **Electrum mnemonic** | Electrum-format seed phrase |
+| **Public key** | Raw public key bytes, up to 255 bytes |
+| **Password** | Password with optional login and URL fields |
+| **2FA secret** | Two-factor authentication secret |
+| **Data** | Arbitrary plain text, up to 65,535 bytes |
+| **Wallet descriptor** | Bitcoin output descriptor string, up to 65,535 bytes |
+
+## Seedkeeper v1 vs v2
+
+Seedkeeper hardware ships in two protocol versions:
+
+- **v1** — Each individual secret payload is limited to 255 bytes. Secrets cannot be deleted once written.
+- **v2** — The 255-byte per-secret payload restriction is lifted, allowing larger secrets such as long descriptors or mnemonics with passphrases. Secrets can be individually deleted.
+
+Satochip-Utils detects the protocol version automatically and adjusts available operations accordingly.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Set up your Seedkeeper" icon="shield-check" href="/seedkeeper/setup">
+    Initialize a new card by setting a PIN and label.
+  </Card>
+  <Card title="Store and retrieve secrets" icon="key" href="/seedkeeper/manage-secrets">
+    Generate, import, view, and delete passwords, mnemonics, and more.
+  </Card>
+  <Card title="Back up your card" icon="copy" href="/seedkeeper/backup">
+    Clone all secrets to a second Seedkeeper card via encrypted transfer.
+  </Card>
+</CardGroup>

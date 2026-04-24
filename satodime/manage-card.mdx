@@ -1,0 +1,72 @@
+---
+title: "Edit your Satodime label and verify its authenticity"
+description: "How to set a label on your Satodime card and run an authenticity check using the three-level certificate chain in Satochip-Utils — no PIN required."
+---
+
+Satochip-Utils gives you two primary management operations for a Satodime card: setting a human-readable label to identify the card, and running an authenticity check to confirm that the card was produced by Satochip. Neither operation requires a PIN — simply insert the card and navigate to the relevant menu item.
+
+## Edit label
+
+The label is a short text tag stored on the card that helps you distinguish between multiple cards or associate the card with a person, name, or purpose. Labels are stored as UTF-8 text and are capped at 64 bytes.
+
+<Steps>
+  <Step title="Insert your Satodime">
+    Plug in your smart card reader and insert the Satodime. Satochip-Utils detects the card automatically and shows the Satodime menu.
+  </Step>
+  <Step title="Open the edit label screen">
+    Click **Edit Label** in the left navigation menu. The current label is not pre-filled; the entry field starts empty.
+  </Step>
+  <Step title="Type your new label">
+    Enter a label in the text field. Keep it under 64 bytes when encoded as UTF-8. Most ASCII text stays well within this limit; emoji and non-Latin characters may use more bytes per character.
+  </Step>
+  <Step title="Apply the change">
+    Click **Change it** or press Enter. Satochip-Utils writes the label to the card. A success popup confirms the update, and the application returns to the home screen.
+  </Step>
+</Steps>
+
+<Note>
+  The 64-byte limit applies to the UTF-8 encoded representation of the label, not the number of characters. A label with 64 ASCII characters uses exactly 64 bytes, while a label containing multi-byte characters such as accented letters or emoji will reach the limit sooner.
+</Note>
+
+## Check authenticity
+
+The authenticity check verifies that your Satodime card carries a valid certificate chain rooted in the Satochip Certificate Authority. This proves the card was manufactured and programmed by Satochip, not a third party.
+
+The check inspects three certificate levels:
+
+- **Root CA certificate** — the top-level Satochip certificate authority
+- **Sub CA certificate** — an intermediate certificate authority signed by the Root CA
+- **Device certificate** — the unique certificate embedded in your specific card, signed by the Sub CA
+
+<Steps>
+  <Step title="Insert your Satodime">
+    Insert the card into your smart card reader. No PIN is required.
+  </Step>
+  <Step title="Open the authenticity screen">
+    Click **Check Authenticity** in the left navigation menu. Satochip-Utils immediately contacts the card and verifies the certificate chain.
+  </Step>
+  <Step title="Read the result">
+    The status field at the top of the screen displays either **Your card is authentic** or **Your card is not authentic**, with an icon indicating the result.
+  </Step>
+  <Step title="Inspect individual certificates (optional)">
+    Use the radio buttons to switch between the Root CA, Sub CA, and Device certificate views. Each view shows the raw certificate text for that level of the chain.
+  </Step>
+</Steps>
+
+<Warning>
+  If the authenticity check returns "Your card is not authentic", do not use the card to store or transfer funds. Satochip-Utils will display the following message: "We could not authenticate the issuer of this card. If you did not load the card applet by yourself, be extremely careful!" Contact **support@satochip.io** to report any suspicious device.
+</Warning>
+
+## View card information
+
+The **About** screen shows general information about the connected card without requiring a PIN.
+
+| Field | Description |
+|---|---|
+| Applet version | Protocol and applet version numbers reported by the card |
+| Label | The label currently stored on the card |
+| Genuine | Whether the certificate chain verified successfully |
+| Card setup | Whether the card has completed its initial setup |
+| NFC status | Whether NFC is enabled, disabled, or blocked on the card |
+
+To open the About screen, click **About** in the left navigation menu while a Satodime is connected.

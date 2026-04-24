@@ -1,0 +1,116 @@
+---
+title: "Change your Satochip PIN, label, and factory reset"
+description: "How to change your Satochip PIN, edit its label, verify card authenticity, view card info, and perform a factory reset using Satochip-Utils."
+---
+
+Once your Satochip is set up, Satochip-Utils gives you ongoing management tools accessible from the sidebar: change your PIN, rename the card, verify it's genuine, inspect its status, or wipe it back to factory defaults.
+
+## Change PIN
+
+You can update your PIN at any time after the card has been initialized.
+
+**PIN rules for the new PIN:**
+- Minimum 4 characters
+- Maximum 16 characters
+- Letters, numbers, and symbols are all accepted
+
+<Steps>
+  <Step title="Open Change PIN">
+    With your card inserted, click **Change Pin** in the sidebar.
+  </Step>
+  <Step title="Enter your current PIN">
+    Type your existing PIN in the **Current PIN** field.
+  </Step>
+  <Step title="Enter the new PIN">
+    Type your new PIN in the **New PIN code** field.
+  </Step>
+  <Step title="Confirm the new PIN">
+    Re-enter the new PIN in the **Repeat new PIN code** field.
+  </Step>
+  <Step title="Apply the change">
+    Click **Change PIN**. If the current PIN is correct and the new PIN values match, the card updates immediately and a success message appears.
+  </Step>
+</Steps>
+
+<Warning>
+Each incorrect PIN attempt counts against your remaining tries. After 5 failed attempts the card is permanently blocked.
+</Warning>
+
+## Edit label
+
+The label is a plain-text tag stored on the card that helps you identify it. You can update it at any time.
+
+**Label limit:** maximum 64 bytes (UTF-8 encoded).
+
+<Steps>
+  <Step title="Open Edit Label">
+    Click **Edit Label** in the sidebar. You will be prompted to verify your PIN first.
+  </Step>
+  <Step title="Enter the new label">
+    Type your desired label in the **Label** field — for example, `Savings wallet`.
+  </Step>
+  <Step title="Save">
+    Click **Change it**. The application writes the label to the card and confirms success.
+  </Step>
+</Steps>
+
+## Check authenticity
+
+The authenticity check verifies that your card was issued by Satochip by inspecting a certificate chain stored on the card. Three certificate levels are available:
+
+| Level | What it represents |
+|---|---|
+| **Root CA certificate** | The top-level Satochip certificate authority that anchors the trust chain. |
+| **Sub CA certificate** | An intermediate certificate authority signed by the Root CA. |
+| **Device certificate** | The individual card's certificate, signed by the Sub CA. |
+
+When all three certificates verify correctly, the application displays **Your card is authentic**. If verification fails, the application shows a warning and advises you to contact `support@satochip.io` if you did not load the card applet yourself.
+
+<Steps>
+  <Step title="Open Check Authenticity">
+    Click **Check Authenticity** in the sidebar.
+  </Step>
+  <Step title="Review the result">
+    The authenticity status is shown immediately. Select **Root CA certificate**, **Sub CA certificate**, or **Device certificate** using the radio buttons to inspect each certificate's raw content.
+  </Step>
+</Steps>
+
+## Card information
+
+The **About** screen surfaces both software and card-level details without requiring any configuration:
+
+- **Software information:** Satochip-Utils version and pysatochip library version.
+- **Applet version:** The firmware version running on the card.
+- **Label:** The card's current label (requires PIN verification).
+- **Genuine:** Whether the card passed the authenticity check (requires PIN verification).
+- **Card status:** Whether the card is set up, and how many PIN tries remain.
+- **NFC status:** Whether NFC is enabled, disabled, or blocked.
+- **Satochip configuration:** Whether the card has been seeded, and whether 2FA is enabled.
+
+Click **Verify PIN** on the About screen to unlock the label and authenticity fields if you have not already authenticated in the current session.
+
+## Factory reset
+
+A factory reset erases everything on the card: private keys, the seed, the PIN, the label, and all settings. The card is returned to the same state it was in when you received it.
+
+<Warning>
+A factory reset is irreversible. All data on the card is permanently deleted. Make sure you have written down your seed phrase before proceeding — without it you cannot recover your funds.
+</Warning>
+
+<Steps>
+  <Step title="Back up your seed phrase">
+    Before starting, confirm you have a secure copy of your 12 or 24-word seed phrase. If you use a Seedkeeper card, verify the backup is readable.
+  </Step>
+  <Step title="Open Reset my Card">
+    Click **Reset my Card** in the sidebar, then read the on-screen explanation. Click **Start** when ready.
+  </Step>
+  <Step title="Remove the card">
+    A wizard dialog appears. Follow the prompt and physically remove your card from the card reader, then click the button in the dialog.
+  </Step>
+  <Step title="Reinsert the card">
+    Insert the card again when prompted. Repeat the remove-and-reinsert cycle as many times as the wizard instructs (up to four times depending on card version).
+  </Step>
+  <Step title="Confirm completion">
+    When the counter reaches zero, the application shows a success message and the card is fully reset. You can now set it up again from scratch.
+  </Step>
+</Steps>

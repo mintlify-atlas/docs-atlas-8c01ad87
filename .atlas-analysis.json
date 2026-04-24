@@ -1,0 +1,88 @@
+{
+  "projectType": "general",
+  "projectName": "Satochip-Utils",
+  "projectDescription": "A desktop GUI application that unifies management of Satochip hardware wallets, Seedkeeper secret storage cards, and Satodime bearer instruments into a single tool.",
+  "theme": "almond",
+  "primaryColor": "#8c8c8c",
+  "lightColor": "#2a2a2a",
+  "darkColor": "#cecece",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "getting-started/installation",
+              "getting-started/hardware-requirements"
+            ]
+          },
+          {
+            "group": "Satochip",
+            "pages": [
+              "satochip/overview",
+              "satochip/setup",
+              "satochip/manage-card",
+              "satochip/seed-management"
+            ]
+          },
+          {
+            "group": "Seedkeeper",
+            "pages": [
+              "seedkeeper/overview",
+              "seedkeeper/setup",
+              "seedkeeper/manage-secrets",
+              "seedkeeper/backup"
+            ]
+          },
+          {
+            "group": "Satodime",
+            "pages": [
+              "satodime/overview",
+              "satodime/manage-card"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/secret-types",
+              "reference/troubleshooting",
+              "reference/faq"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Unified management of Satochip, Seedkeeper, and Satodime smart cards",
+    "Satochip hardware wallet setup: PIN code, label, and BIP39 seed import/generation",
+    "Seedkeeper secure secret storage: passwords, mnemonics, wallet descriptors, 2FA secrets, and raw data",
+    "One-click Seedkeeper-to-Seedkeeper encrypted backup",
+    "Card authenticity verification via certificate chain (Root CA, Sub CA, Device)",
+    "Factory reset with guided wizard for Satochip and Seedkeeper",
+    "Strong password generator with customizable length and character sets",
+    "Audit log viewer showing card operation history",
+    "Cross-platform desktop GUI (Windows, macOS, Linux) built with CustomTkinter"
+  ],
+  "publicApiSurface": [
+    "Controller.setup_card_pin(pin, pin_confirm)",
+    "Controller.change_card_pin(current_pin, new_pin, new_pin_confirm)",
+    "Controller.import_seed(mnemonic, passphrase)",
+    "Controller.edit_label(label)",
+    "Controller.get_card_status()",
+    "Controller.get_card_label_infos()",
+    "Controller.get_card_logs()",
+    "Controller.import_password(label, password, login, url)",
+    "Controller.import_masterseed_mnemonic(label, mnemonic, passphrase, descriptor)",
+    "Controller.import_data(label, data)",
+    "Controller.import_wallet_descriptor(label, wallet_descriptor)",
+    "Controller.import_pubkey(label, pubkey_bytes)",
+    "Controller.decode_secret(secret)",
+    "Controller.seedkeeper_reset_secret(sid)",
+    "Controller.generate_random_seed(mnemonic_length)",
+    "ApplicationMode.Normal / FactoryResetV1 / FactoryResetV2 / SeedkeeperBackup"
+  ]
+}

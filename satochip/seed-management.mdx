@@ -1,0 +1,97 @@
+---
+title: "Seed your Satochip: import or generate a BIP39 phrase"
+description: "How to seed your Satochip by importing an existing BIP39 mnemonic or generating a new 12 or 24-word seed phrase, with optional BIP39 passphrase support."
+---
+
+Seeding is the step that loads a master secret into your Satochip so it can derive private keys and manage cryptocurrency funds. You can either bring an existing 12 or 24-word BIP39 mnemonic from another wallet, or generate a fresh one directly within Satochip-Utils. Both flows support an optional BIP39 passphrase.
+
+<Warning>
+Your seed phrase is the only way to recover your wallet if your card is lost, stolen, or reset. Never share it with anyone and never store it digitally. Write it down on paper and keep it somewhere safe.
+</Warning>
+
+<Tip>
+For the most durable backup, store your seed phrase in a Seedkeeper card. Seedkeeper is a dedicated hardware device designed to hold seed phrases securely, giving you an offline encrypted backup.
+</Tip>
+
+## Before you begin
+
+- Your Satochip must already be set up with a PIN. If you have not done that yet, see [Set up your Satochip](/satochip/setup).
+- Seeding can only be done once per initialization. If your card already contains a seed and you need to change it, you must perform a factory reset first. See [Manage your card](/satochip/manage-card#factory-reset).
+
+<Note>
+Re-seeding an already-seeded card is not supported. The card will reject the operation. Perform a factory reset to start fresh.
+</Note>
+
+## What a seed phrase looks like
+
+A 12-word BIP39 seed phrase looks like this:
+
+```text
+mirror protect virus wood quantum cancel foam drip supreme zero canal echo
+```
+
+Each word is drawn from a standard 2048-word BIP39 word list. The words together encode the entropy that derives all of your wallet's private keys. Never modify, reorder, or share them.
+
+## BIP39 passphrase
+
+A passphrase is an optional extra word (or phrase) appended to your seed during key derivation. It creates an entirely different set of keys from the same mnemonic — often called a "25th word" for 24-word seeds.
+
+Rules for passphrases in Satochip-Utils:
+- Must not be blank or consist only of spaces.
+- Any non-empty string is accepted: words, sentences, numbers, symbols.
+- If you use a passphrase, you must provide the exact same string every time you restore your wallet. There is no way to recover it if forgotten.
+
+## Import an existing seed
+
+Use this flow if you already have a BIP39 seed phrase from another wallet and want to load it into your Satochip.
+
+<Steps>
+  <Step title="Open the seed screen">
+    With your card inserted and PIN set, click **Setup Seed** in the sidebar. The seed import/generate screen opens.
+  </Step>
+  <Step title="Select import">
+    Choose **I already have a seedphrase** using the radio button.
+  </Step>
+  <Step title="Enter your seed phrase">
+    Click the text area and type or paste your 12 or 24-word mnemonic. Replace the placeholder text entirely. Words must be separated by single spaces.
+  </Step>
+  <Step title="Add a passphrase (optional)">
+    Check **Use a passphrase (optional)** if your wallet uses one. A passphrase entry field appears. Type your passphrase exactly as it was used originally — it is case-sensitive. Leave this unchecked if your wallet has no passphrase.
+  </Step>
+  <Step title="Import">
+    Click **Import**. Satochip-Utils validates the mnemonic against the BIP39 word list. If valid, the seed is derived and written to the card. A success dialog confirms the card is now seeded.
+  </Step>
+</Steps>
+
+## Generate a new seed
+
+Use this flow if you are setting up a brand-new wallet and do not have an existing seed.
+
+<Steps>
+  <Step title="Open the seed screen">
+    With your card inserted and PIN set, click **Setup Seed** in the sidebar.
+  </Step>
+  <Step title="Select generate">
+    Choose **I want to generate a new seedphrase** using the radio button.
+  </Step>
+  <Step title="Choose word count">
+    Select **12 words** or **24 words**:
+    - **12 words** uses 128 bits of entropy — sufficient for most use cases.
+    - **24 words** uses 256 bits of entropy — higher security margin.
+
+    The application generates the mnemonic immediately and displays it in the text area.
+  </Step>
+  <Step title="Write down the seed phrase">
+    Carefully copy every word, in order, onto paper. Double-check the spelling of each word. This is the only time the full seed phrase is shown — it is not stored by the application.
+  </Step>
+  <Step title="Add a passphrase (optional)">
+    Check **Use a passphrase (optional)** if you want to add a passphrase. Type it in the field that appears. Record the passphrase alongside your seed phrase backup.
+  </Step>
+  <Step title="Import to card">
+    Click **Import**. The generated seed is derived and written to the card. A success dialog confirms the card is now seeded.
+  </Step>
+</Steps>
+
+## After seeding
+
+Once seeded, the sidebar shows **Setup Done** and all card management options become fully available. You can now use your Satochip with compatible Bitcoin and cryptocurrency wallets.

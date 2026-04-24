@@ -1,0 +1,88 @@
+---
+title: "Satochip-Utils FAQ: cards, PIN, secrets, and backups"
+description: "Answers to frequently asked questions about Satochip-Utils, covering card types, PIN management, secret storage, backups, and platform support."
+---
+
+The questions below cover the most common points of confusion when getting started with Satochip-Utils and the Satochip card ecosystem. Answers are based on the application source code and official README.
+
+<AccordionGroup>
+  <Accordion title="What is the difference between Satochip, Seedkeeper, and Satodime?">
+    All three are smart card products from Satochip, but they serve different purposes:
+
+    - **Satochip** is a hardware wallet. It stores your BIP32 master seed and derives cryptographic keys from it. You set a PIN (4–16 characters) during setup, and the card requires that PIN for operations.
+    - **Seedkeeper** is a secret storage card. It holds encrypted records — passwords, mnemonics, 2FA secrets, wallet descriptors, and arbitrary data — and protects them behind a PIN. It is designed to be used as a secure backup medium or password vault.
+    - **Satodime** is a bearer instrument. It does not store a seed or any user-defined secrets, and it does not require a PIN. Whoever holds the physical card has full access to it.
+
+    Satochip-Utils manages all three card types from a single application.
+  </Accordion>
+
+  <Accordion title="Can I use multiple card types with Satochip-Utils?">
+    Yes. Satochip-Utils detects the card type automatically when you insert a card and adjusts the menu accordingly. You can insert a Satochip, remove it, insert a Seedkeeper, and the application will switch contexts without restarting.
+
+    Only one card can be active at a time. The Seedkeeper backup wizard requires you to alternate between a master card and a backup card during the same session, which the wizard guides you through.
+  </Accordion>
+
+  <Accordion title="What happens if I forget my PIN?">
+    There is no PIN recovery mechanism. The PIN is verified entirely on the card, and there is no back-door or reset code.
+
+    If you enter the wrong PIN too many times, the card is blocked (`PinBlockedError`). The only way to use the card again after it is blocked is to perform a factory reset, which permanently erases all data on the card — including private keys and stored secrets.
+
+    Keep a written record of your PIN in a secure location, separate from the card itself.
+  </Accordion>
+
+  <Accordion title="How many secrets can I store on a Seedkeeper?">
+    The number of secrets depends on the available flash memory on the card and the size of each secret. Seedkeeper v2 cards expose a memory status screen (accessible from the **About** section after PIN verification) that shows free and total memory in bytes, and the current count of stored secrets.
+
+    Seedkeeper v1 cards do not expose memory status information in the current version of Satochip-Utils.
+  </Accordion>
+
+  <Accordion title="Does Satochip-Utils work offline?">
+    Yes. The application does not require an internet connection for any card operation. Communication happens entirely over the local USB smart card reader. No data is sent to remote servers during normal use.
+
+    The only operations that open external URLs are the **Go to the Webshop** button in the menu (which opens `satochip.io` in your browser) and links in the application's about screen.
+  </Accordion>
+
+  <Accordion title="Can I back up my Satochip seed to a Seedkeeper?">
+    When you set up a Satochip by importing a BIP39 mnemonic, Satochip-Utils stores the seed on the Satochip hardware wallet. To back up that mnemonic phrase, you can import it directly into a Seedkeeper as a BIP39 mnemonic secret using the Seedkeeper secret import flow — you will need to type the mnemonic words manually.
+
+    The Seedkeeper backup wizard copies secrets from one Seedkeeper card to another Seedkeeper card. It is not used to transfer data from a Satochip to a Seedkeeper.
+  </Accordion>
+
+  <Accordion title="What platforms does Satochip-Utils support?">
+    Satochip-Utils is a Python desktop application that runs on Windows, macOS, and Linux. The README and welcome screen describe it as a cross-platform tool.
+
+    Requirements:
+    - Python 3.8 or later
+    - Dependencies listed in `requirements.txt` (install with `pip install -r requirements.txt`)
+    - A compatible USB smart card reader with PC/SC drivers installed
+    - On Linux, `pcscd` must be running and `python3-tk` must be available for the GUI
+  </Accordion>
+
+  <Accordion title="What does the authenticity check verify?">
+    The authenticity check (`card_verify_authenticity`) validates a three-level X.509 certificate chain stored on the card:
+
+    1. **Root CA certificate** — the top-level Satochip certificate authority
+    2. **Sub CA certificate** — an intermediate CA signed by the Root CA
+    3. **Device certificate** — a unique certificate embedded in your specific card, signed by the Sub CA
+
+    If all three certificates form a valid chain, the card is marked as authentic. This confirms that the card was manufactured and programmed by Satochip. If the chain is broken or invalid, the card is marked as not authentic and you should contact **support@satochip.io**.
+
+    The check works without a PIN for Satodime cards. For Satochip and Seedkeeper cards, label and authenticity information is shown after PIN verification on the About screen.
+  </Accordion>
+
+  <Accordion title="Is my seed phrase stored on my computer when I import it?">
+    No. When you type a mnemonic into Satochip-Utils to import it into a Satochip or Seedkeeper, the application encodes it in memory and sends it to the card over the card reader interface. The mnemonic is not written to disk by Satochip-Utils.
+
+    You should still follow standard security practices: use the application on a trusted, malware-free computer, and avoid entering your seed phrase on any device you do not fully control.
+  </Accordion>
+
+  <Accordion title="What is verbose mode?">
+    When you launch Satochip-Utils from the command line with the `-v` or `--verbose` flag, the logging level is set to `DEBUG`. This produces detailed diagnostic output in the terminal — including card communication results, PIN attempt outcomes, and secret import steps — which is useful for troubleshooting.
+
+    ```bash
+    python satochip_utils.py --verbose
+    ```
+
+    Without the flag, the application runs at `INFO` level and shows only high-level status messages. No sensitive data such as your PIN or mnemonic words is written to the log in plaintext.
+  </Accordion>
+</AccordionGroup>

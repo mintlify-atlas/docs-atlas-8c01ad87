@@ -1,0 +1,49 @@
+---
+title: "Initialize your Satochip hardware wallet with a PIN"
+description: "Step-by-step guide to setting a PIN and label on a new Satochip card using Satochip-Utils, including PIN requirements and first-time initialization."
+---
+
+Before you can use your Satochip to store or sign cryptocurrency transactions, you need to initialize it with a PIN code and an optional label. This is a one-time process that prepares the card's secure memory, sets access credentials, and unlocks the rest of the Satochip-Utils menu.
+
+## PIN requirements
+
+Your PIN must meet the following rules:
+
+- **Minimum length:** 4 characters
+- **Maximum length:** 16 characters
+- **Allowed characters:** letters (upper and lower case), numbers, and symbols
+
+<Warning>
+Write your PIN down and store it somewhere safe. There is no way to recover a forgotten PIN. After 5 consecutive wrong PIN attempts, the card is permanently blocked.
+</Warning>
+
+<Note>
+A PUK (Unblock Key) is generated automatically by the application during setup and stored internally. You do not need to record or manage it yourself.
+</Note>
+
+## Setup steps
+
+<Steps>
+  <Step title="Insert your Satochip card">
+    Place your Satochip card into a compatible smart card reader connected to your computer. The application detects the card automatically.
+  </Step>
+  <Step title="Launch Satochip-Utils">
+    Open the Satochip-Utils application. When the card is detected and not yet initialized, the sidebar shows **Setup my card**. Click it to open the PIN setup screen.
+  </Step>
+  <Step title="Enter your PIN">
+    Type your chosen PIN in the **New PIN code** field. The field masks input with asterisks.
+  </Step>
+  <Step title="Confirm your PIN">
+    Re-enter the same PIN in the **Confirm PIN code** field. If the two values do not match, the application shows an error and asks you to try again.
+  </Step>
+  <Step title="Save the PIN">
+    Click **Save PIN**. The application sends the setup command to the card. On success, a confirmation dialog appears and the sidebar updates to reflect the initialized state.
+  </Step>
+  <Step title="Set a label (optional)">
+    After PIN setup completes, the **Edit Label** option becomes available in the sidebar. Open it and enter a name for your card — for example, `Alice's Satochip` — then click **Change it**. Labels help you tell multiple cards apart.
+  </Step>
+</Steps>
+
+## Next step
+
+Your card is now initialized. The next step is to seed it with a BIP39 mnemonic so it can derive keys and manage funds. See [Seed your Satochip](/satochip/seed-management).

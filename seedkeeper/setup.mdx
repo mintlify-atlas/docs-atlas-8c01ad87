@@ -1,0 +1,56 @@
+---
+title: "Initialize your Seedkeeper card and configure a PIN"
+description: "How to initialize a new Seedkeeper by setting a PIN and optional label using Satochip-Utils, including PIN length rules and first-time setup steps."
+---
+
+Before you can store secrets on a Seedkeeper, you must initialize the card by setting a PIN. This one-time setup writes the PIN to the card's secure memory and enables all subsequent operations. Until setup is complete, the card rejects every command.
+
+## Prerequisites
+
+- A Seedkeeper card (v1 or v2)
+- A compatible USB smart card reader
+- Satochip-Utils installed on your computer
+
+## First-time setup
+
+<Steps>
+  <Step title="Insert your Seedkeeper">
+    Plug the smart card reader into your computer, then insert your Seedkeeper card. Satochip-Utils detects the card automatically and shows the setup screen when the card has not yet been initialized.
+  </Step>
+  <Step title="Launch Satochip-Utils">
+    Open the Satochip-Utils application. The interface switches to the Seedkeeper section once a Seedkeeper card is recognized.
+  </Step>
+  <Step title="Enter a PIN">
+    Type your chosen PIN in the **PIN** field. The PIN must be between 4 and 16 characters. A longer PIN is more secure — aim for at least 8 characters.
+  </Step>
+  <Step title="Confirm your PIN">
+    Re-enter the same PIN in the **Confirm PIN** field. The application validates that both entries match before proceeding.
+  </Step>
+  <Step title="Set a label (optional)">
+    Enter a human-readable name for your card in the **Label** field. The label can be up to 64 bytes and helps you identify the card later, especially when working with multiple Seedkeepers. You can leave this blank and add a label later.
+  </Step>
+  <Step title="Complete setup">
+    Click **Setup** (or the equivalent confirm button). The application writes the PIN to the card and navigates to the main Seedkeeper menu. Your card is now ready to store secrets.
+  </Step>
+</Steps>
+
+<Warning>
+  The card blocks itself permanently after **5 consecutive wrong PIN attempts**. There is no recovery mechanism — a blocked card requires a factory reset, which erases all stored secrets. Write down your PIN and keep it safe.
+</Warning>
+
+## Managing your card after setup
+
+Once your Seedkeeper is initialized, the following card-level operations are available from the **Settings** section of the sidebar:
+
+- **Edit label** — Update the card's display name at any time. The new label is written directly to the card.
+- **Change PIN** — Enter your current PIN, then set and confirm a new one. The new PIN must also be between 4 and 16 characters.
+- **Check authenticity** — Verify that your card is a genuine Satochip product by inspecting the Root CA, Sub CA, and Device certificates stored on the card.
+- **Card information** — View the applet version, protocol version (v1 or v2), NFC status, and the number of remaining PIN attempts.
+
+## Factory reset
+
+A factory reset returns the card to its blank factory state. It removes the PIN, label, and **all stored secrets**. The reset wizard guides you through inserting and removing the card multiple times to confirm the operation.
+
+<Warning>
+  A factory reset cannot be undone. All secrets are erased permanently. Back up your secrets to a second Seedkeeper card before resetting.
+</Warning>

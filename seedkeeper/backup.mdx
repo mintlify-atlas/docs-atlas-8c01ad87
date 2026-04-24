@@ -1,0 +1,75 @@
+---
+title: "Back up all your Seedkeeper secrets to a second card"
+description: "How to create an encrypted backup of all secrets from one Seedkeeper card to another using the Satochip-Utils backup wizard — a step-by-step guide."
+---
+
+Seedkeeper supports card-to-card backup: all secrets from a master card are re-encrypted and written to a backup card in one guided session. The transfer is end-to-end encrypted using a shared key that only the two physical cards can compute — neither the application nor the computer ever sees the plaintext of the secrets during transfer.
+
+## Prerequisites
+
+- Two initialized Seedkeeper cards (each with its own PIN)
+- A compatible USB smart card reader
+- Both cards available and within reach — the wizard requires you to swap them during the process
+
+<Note>
+  You will need to physically swap the master and backup cards in the reader at the prompts. This is expected and guided by the wizard. Do not navigate away from the backup screen during the process.
+</Note>
+
+## How the backup works
+
+The backup wizard uses each card's authentication public key (authentikey) to establish a shared secret between the two cards. Each secret from the master card is exported in encrypted form using the backup card's authentikey, then imported to the backup card and decrypted using the master card's authentikey. No plaintext ever leaves the card.
+
+The application sets `ApplicationMode.SeedkeeperBackup` for the duration of the process, which disables normal navigation to prevent accidental interruption. The cancel button resets the mode back to `ApplicationMode.Normal`.
+
+## Backup wizard
+
+<Steps>
+  <Step title="Start the backup wizard">
+    Click **Backup card** in the Seedkeeper sidebar. The wizard opens and explains what will happen. Your master card should be in the reader. Click **Start** to begin.
+  </Step>
+  <Step title="Step 1 — Pair the master card">
+    The wizard reads all secret headers from your master card and retrieves its authentication key. Make sure your master Seedkeeper is inserted in the reader, then click **Next**. You are prompted to enter your master card PIN.
+
+    The application reads:
+    - The master card's authentikey
+    - The list of all secret headers (label, type, ID, fingerprint) stored on the card
+  </Step>
+  <Step title="Step 2 — Pair the backup card">
+    Remove the master card and insert your backup Seedkeeper. Click **Next**. You are prompted to enter your backup card PIN.
+
+    The application:
+    - Verifies that the backup card is a different card (not the same as the master)
+    - Reads the backup card's secret headers
+    - Compares fingerprints to identify which secrets from the master are not yet on the backup
+    - Imports the master card's authentikey into the backup card (if not already present)
+  </Step>
+  <Step title="Step 3 — Export secrets from the master card">
+    Remove the backup card and re-insert the master card. Click **Next**. The application verifies the master card by its authentikey, imports the backup card's authentikey into the master (if needed), then exports each secret that is missing from the backup — encrypted using the backup card's authentikey as the pairing key.
+  </Step>
+  <Step title="Step 4 — Import secrets to the backup card">
+    Remove the master card and re-insert the backup card. Click **Next**. The application verifies the backup card by its authentikey, then imports each encrypted secret using the master card's authentikey as the pairing key. After each import, the fingerprint of the imported secret is verified against the original to confirm integrity.
+  </Step>
+  <Step title="View the backup result">
+    After all secrets have been processed, the wizard navigates to the backup result screen. The result table shows one row per secret with the columns **ID**, **Label**, and **Result**:
+
+    - A result of `success` means the secret was written to the backup card and its fingerprint was verified.
+    - Any other result indicates an error for that specific secret — the remaining secrets may still have been backed up successfully.
+  </Step>
+</Steps>
+
+<Warning>
+  The backup card must be fully initialized with its own PIN before the backup can proceed. If the backup card has not been set up, the wizard exits and directs you to the card setup screen.
+</Warning>
+
+## Backup result screen
+
+After the wizard completes, the result screen shows whether the backup succeeded or encountered errors:
+
+- **Success** — All secrets were copied to the backup card. The screen shows how many secrets were saved.
+- **Partial or full failure** — One or more secrets could not be transferred. The screen lists each affected secret with an error message.
+
+Secrets that already exist on the backup card (identified by fingerprint) are skipped — the wizard only transfers secrets that are missing from the backup.
+
+## Incremental backups
+
+Because the wizard compares secret fingerprints between the master and backup cards, running the backup again after adding new secrets to the master card will only transfer the new additions. Existing secrets that are already on the backup are not duplicated.

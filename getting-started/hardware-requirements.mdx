@@ -1,0 +1,52 @@
+---
+title: "Supported smart cards and readers for Satochip-Utils"
+description: "Satochip-Utils works with Satochip, Seedkeeper, and Satodime smart cards. A USB PC/SC-compatible card reader is required and must be purchased separately."
+---
+
+Satochip-Utils works with three distinct smart card products from the Satochip ecosystem and requires a USB smart card reader to communicate with them. This page lists which cards are supported and what to look for in a compatible reader before you get started.
+
+## Supported cards
+
+<CardGroup cols={3}>
+  <Card title="Satochip" icon="shield-halved">
+    A hardware wallet stored on a smart card. Satochip holds your BIP39 seed phrase and signs transactions without exposing your private keys. Supports PIN protection, card labeling, and authenticity verification.
+  </Card>
+  <Card title="Seedkeeper" icon="vault">
+    A secure secret storage card. Seedkeeper holds passwords, BIP39 mnemonics, wallet descriptors, 2FA secrets, and raw data in encrypted on-card memory. Secrets can be backed up to a second Seedkeeper card.
+  </Card>
+  <Card title="Satodime" icon="coins">
+    A bearer instrument card for cryptocurrency. Satodime holds sealed crypto keys that can be transferred physically like cash. Satochip-Utils lets you view card information, edit the label, and verify authenticity.
+  </Card>
+</CardGroup>
+
+You can purchase any of these cards directly from [satochip.io](https://satochip.io).
+
+## Smart card reader
+
+<Note>
+  A smart card reader is not included with any Satochip card — you must purchase one separately. A USB PC/SC-compatible reader is required for Satochip-Utils to detect and communicate with your card.
+</Note>
+
+Satochip-Utils uses `pyscard`, a Python wrapper for the PC/SC standard, to interface with smart card readers. Any reader that supports the PC/SC specification and is recognized by your operating system's smart card service will work.
+
+When choosing a reader, look for:
+
+- **Interface**: USB (wired readers are most reliable)
+- **Standard**: PC/SC compatible (also described as ISO 7816 contact card readers)
+- **Driver support**: Most modern readers are plug-and-play on Windows and macOS; Linux users may need `libpcsclite` installed
+
+You can purchase a compatible reader from [satochip.io](https://satochip.io/product/chip-card-reader/).
+
+## Platform dependencies
+
+On Linux, the PC/SC daemon and development libraries must be present for `pyscard` to function. Install them with:
+
+```bash
+sudo apt install libpcsclite-dev pcscd
+```
+
+On Windows and macOS, PC/SC support is built into the operating system and no additional installation is needed.
+
+## Next steps
+
+Once you have a supported card and a compatible reader, proceed to [installation](/getting-started/installation) to set up Satochip-Utils on your computer.

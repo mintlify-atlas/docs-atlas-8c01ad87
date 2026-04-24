@@ -1,0 +1,33 @@
+---
+title: "Satochip hardware wallet features in Satochip-Utils"
+description: "Overview of what Satochip-Utils lets you do with a Satochip hardware wallet — setup, seeding, PIN management, authenticity, and factory reset."
+---
+
+Satochip is a JavaCard-based hardware wallet that stores your Bitcoin and cryptocurrency private keys securely inside a physical smart card. Satochip-Utils is the desktop companion application that lets you initialize, seed, and fully manage your Satochip card from a single interface — no command line required.
+
+## What you can do with Satochip-Utils
+
+Satochip-Utils covers every stage of your Satochip card's lifecycle:
+
+- **PIN setup** — Protect your card with a 4–16 character PIN during first-time initialization.
+- **Seed import or generation** — Load an existing 12 or 24-word BIP39 mnemonic, or generate a new one directly on your computer, with optional BIP39 passphrase support.
+- **Label** — Give your card a human-readable name to distinguish it from other cards.
+- **Change PIN** — Update your PIN at any time once the card is set up.
+- **Edit label** — Rename your card whenever you need to.
+- **Check authenticity** — Verify that your card is genuine by inspecting its Root CA, Sub CA, and Device certificates.
+- **Card information** — View the applet version, NFC status, seeding status, 2FA status, and remaining PIN tries.
+- **Factory reset** — Wipe the card back to its factory state, erasing all keys, settings, and data.
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Set up your Satochip" icon="shield-check" href="/satochip/setup">
+    Initialize a new card by setting a PIN and label.
+  </Card>
+  <Card title="Seed your Satochip" icon="seedling" href="/satochip/seed-management">
+    Import an existing BIP39 phrase or generate a new one.
+  </Card>
+  <Card title="Manage your card" icon="sliders" href="/satochip/manage-card">
+    Change your PIN, edit the label, check authenticity, and more.
+  </Card>
+</CardGroup>

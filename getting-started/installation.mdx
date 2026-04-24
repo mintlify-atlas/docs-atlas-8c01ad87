@@ -1,0 +1,101 @@
+---
+title: "Install Satochip-Utils on Windows, macOS, and Linux"
+description: "Install Satochip-Utils on Windows, macOS, or Linux using a pre-built binary or from Python source. Requires Python 3.8+ and a USB smart card reader."
+---
+
+Satochip-Utils is a desktop GUI application for managing Satochip hardware wallets, Seedkeeper secret storage cards, and Satodime bearer cards. This page walks you through installing version 0.2.1-beta on your operating system, whether you prefer a pre-built binary or running directly from Python source.
+
+<Warning>
+  Satochip-Utils can display and handle BIP39 seed phrases. Your seed phrase is the only way to recover your wallet — never share it with anyone, never store it unencrypted on your computer, and keep a physical backup in a safe place.
+</Warning>
+
+## Pre-built binaries
+
+Pre-built binaries are the recommended option for most users. No Python installation is required.
+
+<Steps>
+  <Step title="Download the release">
+    Go to the [Satochip-Utils releases page](https://github.com/Toporin/Satochip-Utils/releases) on GitHub and download the installer for your operating system.
+  </Step>
+  <Step title="Install and launch">
+    <Tabs>
+      <Tab title="Windows">
+        Run the downloaded `.exe` installer and follow the on-screen prompts. Once installed, launch **Satochip-Utils** from the Start menu or the desktop shortcut.
+      </Tab>
+      <Tab title="macOS">
+        Open the downloaded `.dmg` file, drag **Satochip-Utils** into your Applications folder, then double-click it to launch. If macOS shows a security warning, go to **System Settings → Privacy & Security** and click **Open Anyway**.
+      </Tab>
+      <Tab title="Linux">
+        Make the downloaded binary executable and run it:
+
+        ```bash
+        chmod +x satochip_utils
+        ./satochip_utils
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step title="Connect your card reader">
+    Plug in a USB PC/SC-compatible smart card reader and insert your Satochip, Seedkeeper, or Satodime card. The application detects your card automatically on launch.
+  </Step>
+</Steps>
+
+## From source
+
+Run Satochip-Utils directly from its Python source if you prefer to inspect the code, contribute, or run a version not yet packaged as a binary.
+
+<Note>
+  Python 3.8 or later is required. Download Python from [python.org](https://www.python.org/downloads/) if you do not already have it installed.
+</Note>
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/Toporin/Satochip-Utils.git
+    cd Satochip-Utils
+    ```
+  </Step>
+  <Step title="Install dependencies">
+    Install all required Python packages from `requirements.txt`:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+    Key dependencies include `pysatochip` for card communication, `pyscard` for PC/SC smart card access, `customtkinter` for the GUI, and `mnemonic` for BIP39 seed phrase generation.
+  </Step>
+  <Step title="Launch the application">
+    <Tabs>
+      <Tab title="Windows">
+        ```batch
+        python satochip_utils.py
+        ```
+      </Tab>
+      <Tab title="macOS">
+        ```bash
+        python3 satochip_utils.py
+        ```
+      </Tab>
+      <Tab title="Linux">
+        ```bash
+        python3 satochip_utils.py
+        ```
+      </Tab>
+    </Tabs>
+
+    To see detailed logging output in the terminal, add the `--verbose` flag:
+
+    ```bash
+    python3 satochip_utils.py --verbose
+    ```
+  </Step>
+</Steps>
+
+## Next steps
+
+Once Satochip-Utils is running, connect your card and refer to the relevant guide for your device:
+
+- [Hardware requirements](/getting-started/hardware-requirements) — supported cards and readers
+- [Satochip setup](/satochip/setup) — initialize a Satochip hardware wallet
+- [Seedkeeper setup](/seedkeeper/setup) — configure a Seedkeeper card
+- [Satodime management](/satodime/manage-card) — manage a Satodime bearer card
